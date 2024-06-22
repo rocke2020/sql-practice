@@ -1,0 +1,44 @@
+show variables like '%version%';
+
+use menagerie;
+
+SELECT name, birth FROM pet WHERE MONTH(birth) = MOD(MONTH(CURDATE()), 12) - 1;
+
+INSERT INTO pet (phone) VALUES ('');
+
+SELECT * FROM pet WHERE REGEXP_LIKE(name, 'w');
+SELECT * FROM pet WHERE name RLIKE 'w';
+SELECT * FROM pet WHERE name REGEXP 'w';
+SELECT * FROM pet WHERE name LIKE '%w%';
+
+SELECT name, birth FROM pet ORDER BY birth DESC;
+SELECT name, birth FROM pet ORDER BY birth ASC;
+SELECT name, birth FROM pet ORDER BY birth;
+
+SELECT owner, COUNT(*) FROM pet GROUP BY owner;
+SELECT species, sex, COUNT(*) FROM pet GROUP BY species, sex;
+
+-- error: SELECT DISTINCT species, name, birth FROM pet WHERE species = 'dog' OR species = 'cat';
+SELECT species, name, birth FROM pet WHERE species = 'dog' OR species = 'cat';
+SELECT DISTINCT species FROM pet WHERE species = 'dog' OR species = 'cat';
+
+-- wrong, because sql mode is "ONLY_FULL_GROUP_BY"
+SELECT owner, COUNT(*) FROM pet;
+SELECT owner, COUNT(*) FROM pet GROUP BY owner;
+
+load data local infile 'D:\\sql\\mysql\\data\\demo\\pet.txt' into table pet;
+LOAD DATA LOCAL INFILE 'D:\\codes\\sql-practice\\menagerie-db\\event.txt' INTO TABLE event;
+
+
+CREATE DATABASE if not exists testdb;
+
+CREATE TABLE shop (
+    article INT UNSIGNED  DEFAULT '0000' NOT NULL,
+    dealer  CHAR(20)      DEFAULT ''     NOT NULL,
+    price   DECIMAL(16,2) DEFAULT '0.00' NOT NULL,
+    PRIMARY KEY(article, dealer));
+INSERT INTO shop VALUES
+    (1,'A',3.45),(1,'B',3.99),(2,'A',10.99),(3,'B',1.45),
+    (3,'C',1.69),(3,'D',1.25),(4,'D',19.95);
+
+SELECT MAX(article) AS article FROM shop;
