@@ -46,3 +46,9 @@ FROM   shop
 WHERE  price=(SELECT MAX(price) FROM shop);
 ```
 https://dev.mysql.com/doc/refman/8.4/en/example-maximum-row.html
+
+SELECT s1.article, s1.dealer, s1.price
+FROM shop s1
+LEFT JOIN shop s2 ON s1.article = s2.article AND s1.price < s2.price
+WHERE s2.article IS NULL
+ORDER BY s1.article;

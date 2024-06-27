@@ -18,12 +18,15 @@ SELECT name, birth FROM pet ORDER BY birth;
 SELECT owner, COUNT(*) FROM pet GROUP BY owner;
 SELECT species, sex, COUNT(*) FROM pet GROUP BY species, sex;
 
--- error: SELECT DISTINCT species, name, birth FROM pet WHERE species = 'dog' OR species = 'cat';
+-- error: 
+SELECT DISTINCT species, name, birth FROM pet WHERE species = 'dog' OR species = 'cat';
+
 SELECT species, name, birth FROM pet WHERE species = 'dog' OR species = 'cat';
 SELECT DISTINCT species FROM pet WHERE species = 'dog' OR species = 'cat';
 
 -- wrong, because sql mode is "ONLY_FULL_GROUP_BY"
 SELECT owner, COUNT(*) FROM pet;
+
 SELECT owner, COUNT(*) FROM pet GROUP BY owner;
 
 load data local infile 'D:\\sql\\mysql\\data\\demo\\pet.txt' into table pet;
@@ -42,3 +45,28 @@ INSERT INTO shop VALUES
     (3,'C',1.69),(3,'D',1.25),(4,'D',19.95);
 
 SELECT MAX(article) AS article FROM shop;
+
+
+CREATE TABLE parent (
+    id INT NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE=INNODB;
+
+CREATE TABLE child (
+    id INT,
+    parent_id INT,
+    INDEX par_ind (parent_id),
+    FOREIGN KEY (parent_id)
+        REFERENCES parent(id)
+) ENGINE=INNODB;
+
+
+--  2 line works, it needs '' around row_number as it is the internal func name, and needs order by
+SELECT dealer, ROW_NUMBER() OVER (ORDER BY article) 'row_number' FROM shop;
+SELECT dealer, ROW_NUMBER() OVER (ORDER BY article) as 'row_number' FROM shop;
+SELECT dealer, price, SUM(price) OVER (PARTITION BY dealer) as total_price FROM shop;
+select count(*) as total_rows from shop;
+select dealer, count(*) over() as total_rows from shop;
+
+INSERT INTO child (id,parent_id) VALUES ROW(1,1);
+INSERT INTO child (id,parent_id) VALUES (1,1);
