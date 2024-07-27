@@ -1,0 +1,1 @@
+select CountryCode, count(Name) From city group by CountryCode;
