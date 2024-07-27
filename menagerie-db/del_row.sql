@@ -1,0 +1,1 @@
+# DELETE FROM event WHERE date='1991-10-12';
